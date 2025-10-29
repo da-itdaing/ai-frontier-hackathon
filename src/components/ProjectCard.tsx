@@ -1,5 +1,5 @@
 import svgPaths from "../imports/svg-63jcvnjryn";
-import { ImageWithFallback } from "./figma/ImageWithFallback";
+import { ImageWithFallback } from "./images_fb/ImageWithFallback";
 
 interface ProjectCardProps {
   imageUrl: string;

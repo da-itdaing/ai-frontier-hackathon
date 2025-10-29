@@ -1,4 +1,9 @@
+import data from './data.json';
+
 export * from "./types";
-export * from "./needs";
-export * from "./gives";
-export * from "./categories";
+
+// JSON 데이터 export
+export const needsData = data.needs;
+export const givesData = data.gives;
+export const needsCategories = data.categories.needsCategories;
+export const givesCategories = data.categories.givesCategories;
