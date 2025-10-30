@@ -57,6 +57,7 @@
       },
       "scripts": {
             "dev": "vite",
+            "prebuild": "node scripts/build-images-index.mjs",
             "build": "vite build",
             "docker:up": "docker compose up --build",
             "docker:down": "docker compose down"

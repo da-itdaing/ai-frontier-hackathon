@@ -1,13 +1,19 @@
 import data from './data.json';
 import givesCases from './gives_cases.json';
 import needsCasesRaw from './needs_cases.json';
+import imagesMap from './images_map.json';
 
 export * from "./types";
 
 // JSON 데이터 export
-// Always use generated local images under /images/generated/<id>.jpg
+// Always use generated local images under /images/generated/<id>.jpg, but prefer an index map when available
+const imageForId = (id: string): string => {
+    const map = (imagesMap as Record<string, string>) || {};
+    return map[id] || `/images/generated/${id}.jpg`;
+};
+
 const withLocalImage = <T extends { id: string; imageUrl?: string }>(arr: T[]): T[] =>
-	arr.map((it) => ({ ...it, imageUrl: `/images/generated/${it.id}.jpg` }));
+	arr.map((it) => ({ ...it, imageUrl: imageForId(it.id) }));
 
 export const needsData = withLocalImage([...(needsCasesRaw as any[]), ...data.needs]);
 
@@ -52,7 +58,7 @@ const fromCases = (givesCases as Array<any>).map((row, idx) => {
 	const id = `givecase-${row.year || 'y'}${String(row.month ?? 'm').padStart(2, '0')}-${idx}`;
 	return {
 		id,
-		imageUrl: `/images/generated/${id}.jpg`,
+		imageUrl: imageForId(id),
 		category: cat,
 		title,
 		description: desc,

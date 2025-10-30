@@ -18,6 +18,7 @@ Notes:
 - Idempotent: overwrites images with the same id unless you omit --overwrite.
 - Reads items from data/*.json: data.json, needs_cases.json, gives_cases.json.
 - Use --dry-run to print actions without any API calls or file writes.
+- Allowed sizes: auto | 1024x1024 | 1024x1536 | 1536x1024
 """
 
 from __future__ import annotations
@@ -143,12 +144,13 @@ def build_image_prompt(card: Card) -> str:
     return "\n".join(parts)
 
 
-def refine_prompt_with_llm_langchain(base_prompt: str, model: str, temperature: float = 0.7) -> str:
+def refine_prompt_with_llm_langchain(base_prompt: str, model: str) -> str:
     """Refine the prompt with LangChain's ChatOpenAI. Return only the final prompt text."""
     if not _HAS_LANGCHAIN:
         return base_prompt
     try:
-        llm = ChatOpenAI(model=model, temperature=temperature)
+        # Use LangChain defaults (e.g., default temperature)
+        llm = ChatOpenAI(model=model)
         messages = [
             SystemMessage(content="You are an elite prompt engineer for image generation. Return only the final prompt."),
             HumanMessage(content=(
@@ -168,22 +170,37 @@ def refine_prompt_with_llm_langchain(base_prompt: str, model: str, temperature: 
 # Image Generation (OpenAI SDK)
 # -----------------------------
 
-def generate_image_bytes(client: OpenAI, prompt: str, size: str, quality: str = "high") -> bytes:
-    """Call OpenAI Images API (gpt-image-1) and return raw PNG bytes.
+ALLOWED_SIZES = {"auto", "1024x1024", "1024x1536", "1536x1024"}
 
-    - Valid quality: 'low' | 'medium' | 'high' | 'auto'
-    - Some SDK builds return base64, others a URL; prefer base64 when present.
+def normalize_size_arg(size_arg: str) -> str:
+    """Normalize CLI --size to one of the allowed values.
+    - '1024' -> '1024x1024'
+    - already-allowed strings pass through
+    - anything else raises ValueError (e.g., '512', '512x512')
+    """
+    s = str(size_arg).strip().lower()
+    if s == "1024":
+        return "1024x1024"
+    if s in ALLOWED_SIZES:
+        return s
+    raise ValueError(
+        f"Unsupported size '{size_arg}'. Allowed: {', '.join(sorted(ALLOWED_SIZES))} or '1024'."
+    )
+
+
+def generate_image_bytes(client: OpenAI, prompt: str, size: str) -> bytes:
+    """Call OpenAI Images API (gpt-image-1) and return raw PNG bytes.
+    - We pass only required args to respect API defaults.
     """
     resp = client.images.generate(
         model="gpt-image-1",
         prompt=prompt,
-        size=f"{size}x{size}",  # 256/512/1024 square
-        quality=quality,
+        size=size,  # must be one of ALLOWED_SIZES
     )
 
     data0 = resp.data[0]
 
-    # Try base64 payload first
+    # Prefer base64 when available
     b64 = getattr(data0, "b64_json", None)
     if b64:
         return base64.b64decode(b64)
@@ -222,20 +239,24 @@ def backoff_sleep(attempt: int) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Generate images via LangChain + OpenAI and save under public/images/generated.")
-    parser.add_argument("--size", type=int, default=1024, choices=[256, 512, 1024], help="Square image size")
+    parser.add_argument(
+        "--size",
+        type=str,
+        default="auto",
+        help="Image size: auto | 1024 | 1024x1024 | 1024x1536 | 1536x1024 (default: auto)",
+    )
     parser.add_argument("--limit", type=int, default=0, help="Process only N items (0 = all)")
     parser.add_argument("--no-llm", dest="use_llm", action="store_false", help="Do not refine prompt with a chat model")
     parser.add_argument("--llm-model", type=str, default="gpt-4o-mini", help="Chat model for prompt refinement (LangChain)")
-    parser.add_argument(
-        "--img-quality",
-        type=str,
-        default="high",
-        choices=["low", "medium", "high", "auto"],
-        help="Images API quality parameter (default: high)"
-    )
     parser.add_argument("--overwrite", action="store_true", help="Re-generate even if the file already exists")
     parser.add_argument("--dry-run", action="store_true", help="Print actions without calling APIs")
     args = parser.parse_args()
+
+    # Normalize/validate size early (fail fast for unsupported values such as 512/512x512)
+    try:
+        normalized_size = normalize_size_arg(args.size)
+    except ValueError as e:
+        raise SystemExit(str(e))
 
     if args.dry_run:
         print("[INFO] Dry run enabled: will NOT call APIs or write any image files.\n")
@@ -264,7 +285,7 @@ def main() -> None:
         )
 
         if args.dry_run:
-            print(f"[DRY] Would generate {out_path.name} with prompt:\n{final_prompt}\n")
+            print(f"[DRY] Would generate {out_path.name} with size={normalized_size} and prompt:\n{final_prompt}\n")
             processed += 1
             continue
 
@@ -276,8 +297,7 @@ def main() -> None:
                 png_bytes = generate_image_bytes(
                     client,
                     final_prompt,
-                    size=str(args.size),        # type: ignore[arg-type]
-                    quality=args.img_quality
+                    size=normalized_size,
                 )
                 break
             except Exception as e:

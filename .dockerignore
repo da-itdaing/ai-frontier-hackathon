@@ -1,4 +1,21 @@
+# Reduce Docker build context size and speed up builds
 node_modules
+npm-debug.log
+dist
+build
+.git
+.gitignore
+.DS_Store
+server/__pycache__
+**/__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.swp
+*.swo
+coverage
+tmp
+tempnode_modules
 myenv
 build
 .git
