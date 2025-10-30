@@ -4,13 +4,14 @@ interface CardBackProps {
   title: string;
   description: string;
   skills: string[];
-  location?: string;
   duration?: string;
+  contact?: string;
   type: "needs" | "gives";
 }
 
-export function CardBack({ title, description, skills, location, duration, type }: CardBackProps) {
-  const bgColor = type === "needs" ? "bg-[#e8f4ff]" : "bg-[#fff4e8]";
+export function CardBack({ title, description, skills, duration, contact, type }: CardBackProps) {
+  // Keep a consistent white background when flipped
+  const bgColor = "bg-white";
   const accentColor = type === "needs" ? "bg-blue-500" : "bg-orange-500";
   
   return (
@@ -33,16 +34,16 @@ export function CardBack({ title, description, skills, location, duration, type 
         ))}
       </div>
       
-      {(location || duration) && (
+      {(duration || contact) && (
         <div className="flex flex-col gap-[4px] pt-[8px] border-t border-gray-300">
-          {location && (
-            <p className="font-['Inter:Regular','Noto_Sans_KR:Regular',sans-serif] font-normal text-[12px] text-[#666]">
-              📍 {location}
-            </p>
-          )}
           {duration && (
             <p className="font-['Inter:Regular','Noto_Sans_KR:Regular',sans-serif] font-normal text-[12px] text-[#666]">
               ⏱️ {duration}
+            </p>
+          )}
+          {contact && (
+            <p className="font-['Inter:Regular','Noto_Sans_KR:Regular',sans-serif] font-normal text-[12px] text-[#666]">
+              💬 {contact}
             </p>
           )}
         </div>

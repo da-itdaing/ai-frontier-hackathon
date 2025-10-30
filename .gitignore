@@ -1,3 +1,25 @@
+# Node/Vite
+node_modules/
+dist/
+.vite/
+.DS_Store
+
+# Python/venv
+myenv/
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# Env files (secrets)
+.env
+server/.env
+
+# Editor/OS
+.idea/
+.vscode/
+*.swp
+*.swo
 # Created by https://www.toptal.com/developers/gitignore/api/react
 # Edit at https://www.toptal.com/developers/gitignore?templates=react
 
@@ -7,6 +29,7 @@
 logs
 **/*.backup.*
 **/*.back.*
+.env
 
 node_modules
 bower_components

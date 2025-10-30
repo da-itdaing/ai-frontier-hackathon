@@ -63,7 +63,7 @@ export function HowItWorks() {
             어떻게 작동하나요?
           </h2>
           <p className="font-['Inter:Regular','Noto_Sans_KR:Regular',sans-serif] text-[18px] text-gray-600 max-w-2xl mx-auto">
-            간단한 4단계로 혁신적인 솔루션과 실제 필요를 연결합니다.
+            간단한 4단계로<br></br> 혁신적인 솔루션과 실제 필요를 연결합니다.
           </p>
         </div>
 

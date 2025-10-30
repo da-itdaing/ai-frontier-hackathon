@@ -1,5 +1,5 @@
 import { Button } from "./ui/button";
-import { Menu, X, User, LogIn, Upload } from "lucide-react";
+import { Menu, X, Upload } from "lucide-react";
 import { useState } from "react";
 
 export function Header() {
@@ -9,8 +9,13 @@ export function Header() {
     <header className="bg-white shadow-sm border-b sticky top-0 z-50 backdrop-blur-sm bg-white/95">
       <div className="max-w-[1400px] mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          {/* Logo */}
-          <div className="flex items-center gap-3">
+          {/* Logo (clickable to home) */}
+          <a
+            href="#"
+            aria-label="홈으로 이동"
+            className="flex items-center gap-3"
+            onClick={() => setIsMenuOpen(false)}
+          >
             <div className="flex items-center gap-2">
               <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-orange-600 rounded-lg flex items-center justify-center">
                 <span className="font-['Inter:Bold','Noto_Sans_KR:Bold',sans-serif] text-white text-[18px]">D</span>
@@ -21,7 +26,7 @@ export function Header() {
                 </h1>
               </div>
             </div>
-          </div>
+          </a>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
@@ -37,22 +42,19 @@ export function Header() {
             <a href="#how-it-works" className="font-['Inter:Regular','Noto_Sans_KR:Regular',sans-serif] text-gray-700 hover:text-blue-600 transition-colors">
               이용 방법
             </a>
+            <a href="#/request" className="font-['Inter:Regular','Noto_Sans_KR:Regular',sans-serif] text-gray-700 hover:text-blue-600 transition-colors">
+              도움 요청하기
+            </a>
           </nav>
 
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center gap-3">
-            <Button variant="ghost" size="sm" className="gap-2">
-              <LogIn className="w-4 h-4" />
-              로그인
-            </Button>
-            <Button variant="outline" size="sm" className="gap-2 border-blue-600 text-blue-600 hover:bg-blue-50">
-              <User className="w-4 h-4" />
-              회원가입
-            </Button>
-            <Button size="sm" className="gap-2 bg-gradient-to-r from-blue-600 to-orange-600 hover:from-blue-700 hover:to-orange-700">
-              <Upload className="w-4 h-4" />
-              솔루션 제출
-            </Button>
+            <a href="#/submit">
+              <Button size="sm" className="gap-2 bg-gradient-to-r from-blue-600 to-orange-600 hover:from-blue-700 hover:to-orange-700">
+                <Upload className="w-4 h-4" />
+                솔루션 제출
+              </Button>
+            </a>
           </div>
 
           {/* Mobile Menu Button */}
@@ -80,19 +82,16 @@ export function Header() {
               <a href="#how-it-works" className="font-['Inter:Regular','Noto_Sans_KR:Regular',sans-serif] text-gray-700 hover:text-blue-600 py-2">
                 이용 방법
               </a>
+              <a href="#/request" className="font-['Inter:Regular','Noto_Sans_KR:Regular',sans-serif] text-gray-700 hover:text-blue-600 py-2">
+                도움 요청하기
+              </a>
               <div className="flex flex-col gap-2 mt-2">
-                <Button variant="ghost" size="sm" className="gap-2 justify-start">
-                  <LogIn className="w-4 h-4" />
-                  로그인
-                </Button>
-                <Button variant="outline" size="sm" className="gap-2 justify-start border-blue-600 text-blue-600">
-                  <User className="w-4 h-4" />
-                  회원가입
-                </Button>
-                <Button size="sm" className="gap-2 justify-start bg-gradient-to-r from-blue-600 to-orange-600">
-                  <Upload className="w-4 h-4" />
-                  솔루션 제출
-                </Button>
+                <a href="#/submit">
+                  <Button size="sm" className="gap-2 justify-start bg-gradient-to-r from-blue-600 to-orange-600">
+                    <Upload className="w-4 h-4" />
+                    솔루션 제출
+                  </Button>
+                </a>
               </div>
             </nav>
           </div>

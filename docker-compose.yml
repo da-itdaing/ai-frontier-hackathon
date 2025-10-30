@@ -1,0 +1,30 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    env_file:
+      - server/.env
+    environment:
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
+      CORS_ORIGINS: '["http://localhost:3000","http://127.0.0.1:3000","http://localhost:5173","http://127.0.0.1:5173","http://frontend"]'
+    volumes:
+      # Mount frontend data into backend at /data for live edits without rebuild
+      - ./data:/data:ro
+      # Persist/store backend generated files (e.g., saved matches)
+      - ./server/data:/app/data
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_BASE=/api
+    environment:
+      VITE_API_BASE: /api
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend

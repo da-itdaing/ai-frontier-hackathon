@@ -1,4 +1,4 @@
-import { Mail, Phone, MapPin, Github, Twitter, Linkedin, Facebook } from "lucide-react";
+import { Phone, MapPin, Github, Twitter, Linkedin, School } from "lucide-react";
 
 export function Footer() {
   return (
@@ -16,19 +16,13 @@ export function Footer() {
               </h3>
             </div>
             <p className="font-['Inter:Regular','Noto_Sans_KR:Regular',sans-serif] text-[14px] text-gray-400 mb-4">
-              해커톤과 공모전의 혁신적인 아이디어를 실제 도움이 필요한 사람들에게 연결합니다.
+              해커톤과 공모전의 혁신적인 아이디어를<br></br>실제 도움이 필요한 사람들에게 연결합니다.
             </p>
             <div className="flex gap-3">
-              <a href="#" className="w-9 h-9 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors">
-                <Facebook className="w-4 h-4" />
+              <a href="https://gj-aischool.or.kr/" className="w-9 h-9 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors">
+                <School className="w-4 h-4" />
               </a>
-              <a href="#" className="w-9 h-9 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-400 transition-colors">
-                <Twitter className="w-4 h-4" />
-              </a>
-              <a href="#" className="w-9 h-9 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors">
-                <Linkedin className="w-4 h-4" />
-              </a>
-              <a href="#" className="w-9 h-9 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors">
+              <a href="https://github.com/da-itdaing/ai-frontier-hackathon" className="w-9 h-9 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors">
                 <Github className="w-4 h-4" />
               </a>
             </div>
@@ -46,12 +40,12 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                <a href="#needs" className="font-['Inter:Regular','Noto_Sans_KR:Regular',sans-serif] text-[14px] hover:text-blue-400 transition-colors">
+                <a href="#/request" className="font-['Inter:Regular','Noto_Sans_KR:Regular',sans-serif] text-[14px] hover:text-blue-400 transition-colors">
                   도움 요청하기
                 </a>
               </li>
               <li>
-                <a href="#gives" className="font-['Inter:Regular','Noto_Sans_KR:Regular',sans-serif] text-[14px] hover:text-orange-400 transition-colors">
+                <a href="#/submit" className="font-['Inter:Regular','Noto_Sans_KR:Regular',sans-serif] text-[14px] hover:text-orange-400 transition-colors">
                   솔루션 제공하기
                 </a>
               </li>
@@ -99,21 +93,33 @@ export function Footer() {
             </h4>
             <ul className="space-y-3">
               <li className="flex items-start gap-2">
-                <Mail className="w-4 h-4 mt-0.5 shrink-0" />
-                <a href="mailto:contact@daitdying.com" className="font-['Inter:Regular','Noto_Sans_KR:Regular',sans-serif] text-[14px] hover:text-blue-400 transition-colors">
-                  contact@daitdying.com
+                {/* KakaoTalk emoji icon (replaces Mail/email) */}
+                <span
+                  aria-hidden="true"
+                  className="mt-0.5 shrink-0 inline-flex w-4 h-4 items-center justify-center rounded-sm"
+                >
+                  💬
+                </span>
+                <a
+                  href="https://open.kakao.com/o/xxxxx"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-['Inter:Regular','Noto_Sans_KR:Regular',sans-serif] text-[14px] hover:text-yellow-400 transition-colors"
+                  title="카카오톡 오픈채팅으로 문의"
+                >
+                  카카오톡 오픈채팅
                 </a>
               </li>
               <li className="flex items-start gap-2">
                 <Phone className="w-4 h-4 mt-0.5 shrink-0" />
                 <a href="tel:02-1234-5678" className="font-['Inter:Regular','Noto_Sans_KR:Regular',sans-serif] text-[14px] hover:text-blue-400 transition-colors">
-                  02-1234-5678
+                  010-2238-0609
                 </a>
               </li>
               <li className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 mt-0.5 shrink-0" />
                 <span className="font-['Inter:Regular','Noto_Sans_KR:Regular',sans-serif] text-[14px]">
-                  서울특별시 강남구<br />테헤란로 123
+                  광주광역시 동구 제봉로 92 (대성학원 1-3층)
                 </span>
               </li>
             </ul>

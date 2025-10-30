@@ -57,7 +57,8 @@
       outDir: 'build',
     },
     server: {
-      port: 3000,
+      // Use a dedicated dev port to avoid clashing with Docker nginx mapped to localhost:3000
+      port: 5173,
       open: true,
     },
   });
